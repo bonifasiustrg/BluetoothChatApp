@@ -1,7 +1,8 @@
-package com.takasima.bluetoothchatapp.domain
+package com.takasima.bluetoothchatapp.data
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import com.takasima.bluetoothchatapp.domain.BluetoothDeviceDomain
 
 @SuppressLint("MissingPermission")
 fun BluetoothDevice.toBluetoothDeviceDomain(): BluetoothDeviceDomain {

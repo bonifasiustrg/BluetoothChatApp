@@ -13,12 +13,11 @@ import javax.inject.Inject
 @HiltViewModel
 class BluetoothViewModel @Inject constructor(
     private val bluetoothController: BluetoothController
-) : ViewModel() {
+): ViewModel() {
 
     private val _state = MutableStateFlow(BluetoothUiState())
-
     val state = combine(
-        bluetoothController.scannerdDevices,
+        bluetoothController.scannedDevices,
         bluetoothController.pairedDevices,
         _state
     ) { scannedDevices, pairedDevices, state ->
@@ -28,7 +27,7 @@ class BluetoothViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _state.value)
 
-    fun startScan(){
+    fun startScan() {
         bluetoothController.startDiscovery()
     }
 

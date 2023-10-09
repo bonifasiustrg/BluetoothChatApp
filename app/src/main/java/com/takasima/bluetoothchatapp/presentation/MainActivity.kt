@@ -28,14 +28,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    //  provice bluetooth from  android system
     private val bluetoothManager by lazy {
         applicationContext.getSystemService(BluetoothManager::class.java)
     }
-    //    hardware modul
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter
     }
+
     private val isBluetoothEnabled: Boolean
         get() = bluetoothAdapter?.isEnabled == true
 
@@ -44,23 +43,23 @@ class MainActivity : ComponentActivity() {
 
         val enableBluetoothLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
-        ) { /*Not Needed*/}
+        ) { /* Not needed */ }
 
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { perms ->
-            val canEnableBluetooth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val canEnableBluetooth = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 perms[Manifest.permission.BLUETOOTH_CONNECT] == true
             } else true
 
-            if (canEnableBluetooth && !isBluetoothEnabled) {
+            if(canEnableBluetooth && !isBluetoothEnabled) {
                 enableBluetoothLauncher.launch(
                     Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 )
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.BLUETOOTH_SCAN,
@@ -70,19 +69,15 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             BluetoothChatAppTheme {
-                val viewmodel = hiltViewModel<BluetoothViewModel>()
-                val state by viewmodel.state.collectAsState()
-
-                // A surface container using the 'background' color from the theme
+                val viewModel = hiltViewModel<BluetoothViewModel>()
+                val state by viewModel.state.collectAsState()
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     DeviceScreen(
                         state = state,
-                        onStartScan = viewmodel::startScan,
-                        onStopScan = viewmodel::stopScan
+                        onStartScan = viewModel::startScan,
+                        onStopScan = viewModel::stopScan
                     )
                 }
             }

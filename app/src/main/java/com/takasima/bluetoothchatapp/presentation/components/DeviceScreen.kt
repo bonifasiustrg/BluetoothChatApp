@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.takasima.bluetoothchatapp.domain.BluetoothDevice
 import com.takasima.bluetoothchatapp.domain.BluetoothDeviceDomain
 import com.takasima.bluetoothchatapp.presentation.BluetoothUiState
 
@@ -24,66 +25,73 @@ import com.takasima.bluetoothchatapp.presentation.BluetoothUiState
 fun DeviceScreen(
     state: BluetoothUiState,
     onStartScan: () -> Unit,
-    onStopScan: () -> Unit,
-
+    onStopScan: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
     ) {
-
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        BluetoothDeviceList(pairedDevices = state.pairedDevices, scannedDevices = state.scannedDevices, onClick = {} , modifier = Modifier.fillMaxWidth().weight(1f))
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            Button(onClick = { onStartScan }) {
-                Text("Start scan")
+        BluetoothDeviceList(
+            pairedDevices = state.pairedDevices,
+            scannedDevices = state.scannedDevices,
+            onClick = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(onClick = onStartScan) {
+                Text(text = "Start scan")
             }
-
-            Button(onClick = { onStopScan }) {
-                Text("Stop scan")
+            Button(onClick = onStopScan) {
+                Text(text = "Stop scan")
             }
         }
     }
-
 }
 
 @Composable
 fun BluetoothDeviceList(
-    pairedDevices: List<BluetoothDeviceDomain>,
-    scannedDevices: List<BluetoothDeviceDomain>,
-    onClick: (BluetoothDeviceDomain) -> Unit,
+    pairedDevices: List<BluetoothDevice>,
+    scannedDevices: List<BluetoothDevice>,
+    onClick: (BluetoothDevice) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier
+    ) {
         item {
             Text(
-                text = "PairedDevices",
+                text = "Paired Devices",
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                modifier = modifier.padding(16.dp)
+                fontSize = 24.sp,
+                modifier = Modifier.padding(16.dp)
             )
         }
-
-        items(pairedDevices) {device ->
-            Text(text = device.name ?: "(No name)",
+        items(pairedDevices) { device ->
+            Text(
+                text = device.name ?: "(No name)",
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onClick(device) }
                     .padding(16.dp)
             )
         }
-
 
         item {
             Text(
                 text = "Scanned Devices",
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                modifier = modifier.padding(16.dp)
+                fontSize = 24.sp,
+                modifier = Modifier.padding(16.dp)
             )
         }
-
-        items(scannedDevices) {device ->
-            Text(text = device.name ?: "(No name)",
+        items(scannedDevices) { device ->
+            Text(
+                text = device.name ?: "(No name)",
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onClick(device) }
@@ -91,5 +99,4 @@ fun BluetoothDeviceList(
             )
         }
     }
-
 }
